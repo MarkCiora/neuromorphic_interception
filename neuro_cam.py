@@ -20,7 +20,7 @@ class NVS:
     #sens will be how sensitive to change
     spatial_filter = np.asarray([[-1,-1,-1],[-1,8,-1],[-1,-1,-1]], dtype = np.float32)
     threshold = .001
-    dt = 0.1
+    dt = 1/30
     N = 3
     acc_max = 1
 
@@ -88,7 +88,7 @@ class NVS:
         sframe = sframe
 
         self.prev_frame = new_frame
-        return tframe, sframe
+        return tframe, sframe, new_frame
     
     def estimate_LOS(self, tframe, sframe):
         mask = np.zeros((self.res,self.res), dtype=np.int8)
@@ -144,7 +144,7 @@ class NVS:
         if wcount == 1:
             wcenter = LOS_center
 
-        print(wcenter,bcenter,LOS_center)
+        #print(wcenter,bcenter,LOS_center)
 
         LOS = LOS_center * self.fov / self.res
         
@@ -155,6 +155,6 @@ class NVS:
         else:
             dLOS = np.zeros((1,2), dtype = np.float32)
 
-        print(LOS,dLOS)
+        #print(LOS,dLOS)
 
         return LOS, dLOS
