@@ -100,20 +100,14 @@ class origLP:
                 if (event.x+1 >= 0 and event.x+i < self.frame_height and event.y+j >= 0 and event.y+j < self.frame_width):
                     # get event for current pixel
                     t1 = event_cloud[(event.x + i) * self.frame_width + (event.y + j)]
-                    # print("t1: ", t1)
 
                     # check if event exists and if event is recent enough
                     if (t1 != 0 and event.t-t1 < self.maxDtThreshold):
-                        # print("im in")
                         # search for nearby events along x axis
                         for xx in range(i+1, searchDistance+1):
-                            # print("xx: ", xx)
                             if (event.x+xx >= 0 and event.x+xx < self.frame_height): # check it's in frame
                                 t2 = event_cloud[(event.x + xx) * self.frame_width + (event.y + j)]
-                                # print("t2: ", t2)
-                                # print("event.t-t2: ", event.t-t2)
                                 if (t2 != 0 and event.t-t2 < self.maxDtThreshold):
-                                    # print("yay")
                                     a10 += float(t2-t1)/(xx-i)
                                     ii += 1
 
@@ -122,7 +116,6 @@ class origLP:
                             if (event.y+yy >= 0 and event.y+yy < self.frame_width): # check it's in frame
                                 t2 = event_cloud[(event.x + i) * self.frame_width + (event.y + yy)]
                                 if (t2 != 0 and event.t-t2 < self.maxDtThreshold):
-                                    # print("yooo")
                                     a01 += float(t2-t1)/(yy-j)
                                     jj += 1
         
@@ -134,8 +127,6 @@ class origLP:
 
         # a10 *= 1e-6
         # a01 *= 1e-6
-
-        print("this is ii, jj, a10, and a01: ", ii, jj, a10, a01)
 
         if (abs(a10) < thr and abs(a01) < thr):
             return flow_event_t(event, 0, 0, 0)

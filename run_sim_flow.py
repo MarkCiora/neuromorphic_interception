@@ -23,8 +23,29 @@ while True:
     cam.update_physics(ac)
     tframe,sframe,frame = cam.update_frame(target)
 
-    stuff = optical_flow.process_frame(tframe)
-    print(stuff)
+    flow_events = optical_flow.process_frame(tframe)
+
+    avg_vx = 0
+    avg_vy = 0
+    center_x = 0
+    center_y = 0
+    count = 0
+    for flow_event in flow_events:
+        avg_vx = avg_vx + flow_event.vx
+        avg_vy = avg_vy + flow_event.vy
+        center_x = center_x + flow_event.tc.x
+        center_y = center_y + flow_event.tc.y
+        count = count + 1
+
+    avg_vx = avg_vx / count
+    avg_vy = avg_vy / count
+    center_x = center_x / count
+    center_y = center_y / count
+
+    print("avg_vx = ", avg_vx)
+    print("avg_vy = ", avg_vy)
+    print("center_x = ", center_x)
+    print("center_y = ", center_y)
 
     LOS, dLOS = cam.estimate_LOS(tframe, sframe)
     ac = cam.calc_ac(LOS, dLOS)
