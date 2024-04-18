@@ -37,18 +37,34 @@ while True:
         center_y = center_y + flow_event.tc.y
         count = count + 1
 
-    avg_vx = avg_vx / count
-    avg_vy = avg_vy / count
-    center_x = center_x / count
-    center_y = center_y / count
+    if count > 0:
+        avg_vx = avg_vx / count
+        avg_vy = avg_vy / count
+        center_x = center_x / count
+        center_y = center_y / count
+    else:
+        avg_vx = 0
+        avg_vy = count
+        center_x = count
+        center_y = count
+
+    ac[0,2] = np.sqrt(avg_vx*avg_vx + avg_vy*avg_vy)
+    if ac[0,2] < 0.00001:
+        ac[0,0] = 0
+        ac[0,1] = 0
+    else:
+        ac[0,0] = avg_vx / ac[0,2]
+        ac[0,1] = avg_vy / ac[0,2]
+    ac[0,2] /= 100
 
     print("avg_vx = ", avg_vx)
     print("avg_vy = ", avg_vy)
     print("center_x = ", center_x)
     print("center_y = ", center_y)
+    print("ac: ", ac)
 
     LOS, dLOS = cam.estimate_LOS(tframe, sframe)
-    ac = cam.calc_ac(LOS, dLOS)
+    # ac = cam.calc_ac(LOS, dLOS)
 
     #get frame pos from LOS
     center = (int((cam.res-1)/2), int((cam.res-1)/2))

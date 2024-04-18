@@ -20,7 +20,7 @@ class NVS:
     #sens will be how sensitive to change
     spatial_filter = np.asarray([[-1,-1,-1],[-1,8,-1],[-1,-1,-1]], dtype = np.float32)
     threshold = .001
-    dt = 1/30
+    dt = 1/5
     N = 3
     acc_max = 1
 
